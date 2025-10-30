@@ -1,0 +1,17 @@
+
+<nav class="navbar navbar-light bg-white border">
+  <div class="container-fluid py-2">
+    <a class="navbar-brand fw-semibold" href="/">Issues</a>
+    <div class="d-flex align-items-center gap-2">
+      {% if request.user.is_authenticated %}
+        <span class="text-muted small">{{ request.user.get_full_name|default:request.user.username }}</span>
+        {% if request.user.is_staff %}
+          <a class="link-secondary small text-decoration-none" href="/admin/">Admin</a>
+        {% endif %}
+        <a class="btn btn-sm btn-outline-secondary" href="/logout/">Logout</a>
+      {% else %}
+        <a class="btn btn-sm btn-primary" href="/login/">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>

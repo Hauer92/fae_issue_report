@@ -1,0 +1,57 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --accent: #4f46e5; /* indigo-600 */
+  --accent-700: #4338ca;
+  --accent-500: #6366f1;
+  --muted: #6b7280; /* gray-500 */
+  --bg: #f7f9fc; /* softer background */
+  --card-bg: #ffffff;
+  --border: #e5e7eb;
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(17,24,39,.06);
+}
+html,body{
+  font-family:'Noto Sans TC', Inter, system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--bg);
+  color:#111827;
+}
+.container{max-width:1100px}
+
+/* Navbar */
+.navbar{background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.navbar-brand{color:var(--accent);font-weight:600}
+.navbar .btn{border-radius:999px}
+
+/* Filters pill card */
+.filters{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;box-shadow:var(--shadow)}
+.filters .btn{border-radius:999px}
+.filters .btn-primary,.filters .btn-outline-primary:hover{background:var(--accent);border-color:var(--accent)}
+.filters .btn-outline-secondary:hover{background-color:#eef2f7}
+
+/* Cards & table */
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
+.table{--bs-table-bg:transparent}
+.table thead th{font-weight:600;color:#374151;border-bottom:1px solid var(--border)}
+.table tbody tr:hover{background-color:#f3f4f6}
+
+/* Badges */
+.badge{border-radius:999px}
+.badge.bg-danger{background:#ef4444}
+.badge.bg-success{background:#10b981}
+.badge.bg-warning{background:#f59e0b;color:#111827}
+
+/* Links */
+a{color:var(--accent)}
+a:hover{color:var(--accent-700)}
+
+/* --- High-specificity overrides --- */
+.navbar.navbar-light .navbar-brand{color:var(--accent)!important;}
+.navbar .btn-primary{background:var(--accent)!important;border-color:var(--accent)!important;}
+a{color:var(--accent)!important;}
+a:hover{color:var(--accent-700)!important;}
+.filters .btn-outline-primary{color:var(--accent)!important;border-color:var(--accent)!important;}
+.filters .btn-outline-primary:hover{background:var(--accent)!important;border-color:var(--accent)!important;color:#fff!important;}
+.filters .btn-outline-info{color:var(--accent-500)!important;border-color:var(--accent-500)!important;}
+.filters .btn-outline-info:hover{background:var(--accent-500)!important;color:#fff!important;}

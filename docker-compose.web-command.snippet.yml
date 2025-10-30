@@ -1,0 +1,15 @@
+# docker-compose.yml 片段（web 服務的 command）
+# 使用 gunicorn 作為 WSGI server，設定合理的 timeout 與 workers
+# - --timeout 120：避免較重的查詢或啟動時因短 timeout 被殺掉
+# - --workers 2：兩個 worker，視 CPU/記憶體再調整（一般 2~4）
+# - --access-logfile - / --error-logfile -：將日誌輸出到 stdout，方便 docker logs 查看
+
+services:
+  web:
+    command: >
+      gunicorn config.wsgi:application \
+        --bind 0.0.0.0:8000 \
+        --timeout 120 \
+        --workers 2 \
+        --access-logfile - \
+        --error-logfile -

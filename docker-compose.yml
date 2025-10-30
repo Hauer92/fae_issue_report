@@ -1,0 +1,60 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: fae_issue_db
+    environment:
+      POSTGRES_DB: fae_issue
+      POSTGRES_USER: fae_issue
+      POSTGRES_PASSWORD: fae_issue
+    ports: ["5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: fae_issue_redis
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redisdata:/data
+
+  web:
+    build:
+      context: /srv/issue_server
+      dockerfile: Dockerfile
+    container_name: fae_issue_web
+    command: >
+      gunicorn app.wsgi:application
+      --bind 0.0.0.0:8000
+      --workers 2
+      --timeout 120
+      --graceful-timeout 120
+      --keep-alive 2
+    environment:
+      DJANGO_SETTINGS_MODULE: app.settings
+      DATABASE_URL: postgres://fae_issue:fae_issue@db:5432/fae_issue
+      REDIS_URL: redis://redis:6379/0
+      API_ENABLED: "false"     # 先關 API
+      OIDC_ENABLED: "false"    # 先關 OIDC
+      PYTHONUNBUFFERED: "1"
+      WHITENOISE_ENABLED: "true"
+      WHITENOISE_MANIFEST: "true"
+
+    depends_on:
+      db:
+        condition: service_started
+      redis:
+        condition: service_started
+    ports: ["8000:8000"]
+    volumes:
+      - /srv/issue_server:/app
+      - static_volume:/app/staticfiles
+    healthcheck:                # 建議加入健康檢查
+      test: ["CMD-SHELL", "python -c 'import socket; s=socket.socket(); s.settimeout(2); s.connect((\"127.0.0.1\",8000)); print(\"ok\")' || exit 1"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  pgdata:
+  redisdata:
+  static_volume:

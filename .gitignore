@@ -1,0 +1,85 @@
+# 
+# ======== Python / Django .gitignore ========
+#
+
+# 虛擬環境 (Virtual Environments)
+# 絕對不要 commit 你的虛擬環境！
+/.venv/
+/venv/
+fae_issue/venv/
+
+# Python 緩存檔案 (Bytecode and Caches)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Django 特定檔案 (Django Specific)
+# ----------------------------------
+# 開發用的資料庫
+*.sqlite3
+db.sqlite3
+
+# 使用者上傳的檔案
+/media/
+
+# collectstatic 收集的靜態檔案 (應在伺服器上產生)
+/staticfiles/
+
+
+# 環境變數 (Secrets and Environment)
+# 包含密鑰，絕對不可 commit！
+.env
+.env.*
+# 保留 .env.example，讓協作者知道需要哪些變數
+!.env.example
+fae_issue/.env
+fae_issue/.env.bak
+
+# 備份與暫存檔 (Project-specific Backups & Temp Files)
+# ----------------------------------------------------
+# 從你的結構中看到大量 .bak 檔案 [cite: 23505, 23508, 23520, 29021, 29028, 29029, 29030, 29031, 29223, 29224, 29225, 29226, 29227, 29228, 29229, 29230, 29231, 29232, 29233, 29234, 29235, 29245, 29246, 29247, 29248, 29249, 29250, 29251, 29252, 29253, 29254, 29255, 29256, 29492]
+*.bak
+*.bak.*
+
+# 專案中的備份資料夾
+/backups/
+/_archive/
+/wheelhouse/
+
+# 你產生的 tree 檔案
+tree.txt
+host-tree-full.txt
+host-tree.txt
+
+# 根目錄的暫存檔 [cite: 16962, 16974, 16986, 16988, 16998, 17000]
+CACHED
+exporting
+naming
+reading
+transferring
+writing
+
+# misc 資料夾內的暫存檔 [cite: 29237, 29238, 29239, 29240, 29241, 29242, 29243]
+misc/=
+misc/[beat
+misc/[beat]
+misc/[celery
+misc/[celery]
+misc/[internal]
+misc/[web
+misc/[web]
+misc/^C
+
+
+# IDE / 編輯器設定 (Editor & IDE Config)
+.vscode/
+.idea/
+
+# Log 檔案 (Logs)
+*.log
+logs/
+
+# Celery 執行檔
+celerybeat-schedule
+celerybeat-schedule.*

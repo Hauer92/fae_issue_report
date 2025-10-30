@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  web:
+    build: .
+    command: bash -c "python manage.py migrate && gunicorn app.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+    env_file: .env
+    volumes:
+      - .:/app
+      - ${NAS_MEDIA_PATH}:/app/media
+    ports:
+      - "8080:8000"
+    depends_on: [db, redis]
+    restart: unless-stopped
+
+  celery:
+    build: .
+    command: celery -A app worker -l info
+    env_file: .env
+    volumes:
+      - .:/app
+      - ${NAS_MEDIA_PATH}:/app/media
+    depends_on: [web, redis]
+    restart: unless-stopped
+
+  beat:
+    build: .
+    command: celery -A app beat -l info
+    env_file: .env
+    depends_on: [web, redis]
+    restart: unless-stopped
+
+volumes:
+  db_data:

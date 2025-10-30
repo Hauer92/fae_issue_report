@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Issues{% endblock %} | Admin-like</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Django Admin core styles -->
+  {% static 
+  {% static 
+  {% static 
+  {% static 
+
+  <!-- Project styles (optional overrides) -->
+  {% static 
+  {% static 
+  {% static 
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="change-list">
+  <div id="container">
+    <div id="header">
+      <div id="branding">
+        <h1 id="site-name">/FAE Issue</a></h1>
+      </div>
+      <div id="user-tools">
+        {% url Admin</a>
+      </div>
+    </div>
+
+    <div id="content" class="colM">
+      <div class="breadcrumbs">
+        {% block breadcrumbs %}/Home</a>{% endblock %}
+      </div>
+
+      {% include "includes/messages.html" %}
+
+      {% block content %}{% endblock %}
+      <br class="clear">
+    </div>
+  </div>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

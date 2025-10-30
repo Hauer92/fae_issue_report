@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Issues{% endblock %} | Admin-like</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Django Admin core styles -->
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/base.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/responsive.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/changelists.css' %}">
+
+  <!-- Project styles (optional overrides) -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/theme.css' %}">
+
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="change-list">
+  <div id="container">
+    <div id="header">
+      <div id="branding">
+        <h1 id="site-name"><a href="/">FAE Issue</a></h1>
+      </div>
+      <div id="user-tools">
+        <a href="/admin/">Admin</a>
+      </div>
+    </div>
+
+    <div id="content" class="colM">
+      <div id="breadcrumbs" class="breadcrumbs">
+        {% block breadcrumbs %}<a href="/">/Home</a>{% endblock %}
+      </div>
+
+      {% include "includes/messages.html" %}
+
+      {% block content %}{% endblock %}
+      <br class="clear">
+    </div>
+  </div>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

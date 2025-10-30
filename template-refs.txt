@@ -1,0 +1,25 @@
+/srv/issue_server/templates/base.html:1:{% load static %}
+/srv/issue_server/templates/_base_admin_like.html.bak.1761311366:1:{% load static %}
+/srv/issue_server/templates/_base_admin_like.html.bak.1761311366:24:        {% url Admin</a>
+/srv/issue_server/templates/_base_admin_like.html.bak.1761311366:33:      {% include "includes/messages.html" %}
+/srv/issue_server/templates/_base_admin_like.html.bak.1761312224:1:{% load static %}
+/srv/issue_server/templates/_base_admin_like.html.bak.1761312224:29:        {% url Admin</a>
+/srv/issue_server/templates/_base_admin_like.html.bak.1761312224:38:      {% include "includes/messages.html" %}
+/srv/issue_server/templates/_base_admin_like.html.bak.202510241126:1:{% load static %}
+/srv/issue_server/templates/_base_admin_like.html.bak.202510241126:28:        {% url Admin</a>
+/srv/issue_server/templates/_base_admin_like.html.bak.202510241126:37:      {% include "includes/messages.html" %}
+/srv/issue_server/templates/_base_admin_like.html:1:{% load static %}
+/srv/issue_server/templates/_base_admin_like.html:37:      {% include "includes/messages.html" %}
+/srv/issue_server/issues/templates/issues/home.html.bak.1761312224:1:{% extends '_base_admin_like.html' %}
+/srv/issue_server/issues/templates/issues/home.html.bak.1761312224:47:            <td>{% url #{{ issue.id }}</a></td>
+/srv/issue_server/issues/templates/issues/home.html.bak.1761312224:48:            <td>{% url {{ issue.title|default:'(no title)' }}</a></td>
+/srv/issue_server/issues/templates/issues/home.html.bak.202510241054:1:{% extends '_base_admin_like.html' %}
+/srv/issue_server/issues/templates/issues/home.html.bak.202510241054:47:            <td><a href="{% url 'issues:detail' issue.id %}">{{ issue.id }}</a></td>
+/srv/issue_server/issues/templates/issues/home.html.bak.202510241054:48:            <td><a href="{% url 'issues:detail' issue.id %}">{{ issue.title|default:"(no title)" }}</a></td>
+/srv/issue_server/issues/templates/issues/home.html:1:{% extends '_base_admin_like.html' %}
+/srv/issue_server/issues/templates/issues/home.html:47:            <td><a href="{% url 'issues:detail' issue.id %}">{{ issue.id }}</a></td>
+/srv/issue_server/issues/templates/issues/home.html:48:            <td><a href="{% url 'issues:detail' issue.id %}">{{ issue.title|default:"(no title)" }}</a></td>
+/srv/issue_server/issues/templates/issues/issue_detail.html:1:{% extends '_base_admin_like.html' %}
+/srv/issue_server/issues/templates/issues/home.html.bak.1761311366:1:{% extends '_base_admin_like.html' %}
+/srv/issue_server/issues/templates/issues/home.html.bak.1761311366:47:            <td>{% url #{{ issue.id }}</a></td>
+/srv/issue_server/issues/templates/issues/home.html.bak.1761311366:48:            <td>{% url {{ issue.title|default:'(no title)' }}</a></td>

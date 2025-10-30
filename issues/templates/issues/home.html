@@ -1,0 +1,96 @@
+{% extends '_base_admin_like.html' %}
+{% block title %}Issues{% endblock %}
+{% block breadcrumbs %}<a href="/">/Home</a> &raquo; Issues{% endblock %}
+{% block content %}
+<h1>Issues</h1>
+
+<div id="changelist">
+  <div class="module">
+    <h2>Quick Filters</h2>
+    <div class="submit-row quick-filters">
+      <a href="?">All</a>
+      <a href="?status=NEW">New</a>
+      <a href="?status=IN_PROGRESS">In Progress</a>
+      <a href="?status=TRIAGED">Triaged</a>
+      <a href="?status=PENDING">Pending</a>
+      <a href="?status=RESOLVED">Resolved</a>
+      <a href="?status=CLOSED">Closed</a>
+      <span class="small muted">Priority:</span>
+      <a href="?priority=0">P0</a>
+      <a href="?priority=1">P1</a>
+      <a href="?priority=2">P2</a>
+      <a href="?priority=3">P3</a>
+    </div>
+  </div>
+
+  <div class="module table-section">
+    <div class="section-header">
+      <h2 style="margin:0">Recent Issues <span class="small muted">(Total: {{ recent_count|default:0 }})</span></h2>
+    </div>
+
+    <div class="results table-wrap">
+      <table id="result_list" class="table sticky">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Priority</th>
+            <th scope="col">Created</th>
+            <th scope="col">Updated</th>
+            <th scope="col">Assigned To</th>
+            <th scope="col">Reporter</th>
+            <th scope="col">SLA Due</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for issue in recent_issues %}
+          <tr class="{% cycle 'row1' 'row2' %}">
+            <td><a class="link" href="/issues/{{ issue.id }}/">{{ issue.id }}</a></td>
+            <td><a class="link" href="/issues/{{ issue.id }}/"><span class="truncate">{{ issue.title|default:"(no title)" }}</span></a></td>
+            <td>{{ issue.get_status_display|default:issue.status|default:"Unknown" }}</td>
+            <td>{{ issue.get_priority_display|default:issue.priority|default:"P3" }}</td>
+            <td>{{ issue.created_at|date:"Y-m-d H:i"|default:"—" }}</td>
+            <td>{{ issue.updated_at|date:"Y-m-d H:i"|default:"—" }}</td>
+            <td>
+              {% if issue.assigned_to %}
+                {{ issue.assigned_to.get_full_name|default:issue.assigned_to.username|default:"—" }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              {% if issue.reporter %}
+                {{ issue.reporter.get_full_name|default:issue.reporter.username|default:"—" }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              {% if issue.sla_due_at %}
+                {{ issue.sla_due_at|date:"Y-m-d H:i" }}
+                {% if issue.due_label %}
+                  <span class="badge {% if issue.due_style == 'danger' %}badge-danger{% else %}badge-info{% endif %}">
+                    {% if issue.due_style == 'danger' %}
+                      Overdue: {{ issue.due_label }}
+                    {% else %}
+                      Due in {{ issue.due_label }}
+                    {% endif %}
+                  </span>
+                {% endif %}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td><span class="truncate">{{ issue.description|default:"—"|truncatechars:80 }}</span></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="10">No issues found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

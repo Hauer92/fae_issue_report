@@ -1,0 +1,15 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Issue 平台{% endblock %}</title>
+  <link href="{% static 'css/app.css' %}" rel="stylesheet">
+</head>
+<body>
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+  <footer>© {% now "Y" %} — Internal Issue System</footer>
+</body>
+</html>

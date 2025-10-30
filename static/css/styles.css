@@ -1,0 +1,272 @@
+/* FAE Issue – Readability-first theme
+   - Stronger contrast & spacing
+   - Clear section hierarchy
+   - Table zebra + hover + (optional) sticky header
+   - Accessible focus state
+   - Preserves your existing CSS variables, dark mode, and classes
+*/
+
+/* -------------------------- */
+/*  Variables (light scheme)  */
+/* -------------------------- */
+:root {
+  --bg: #f8f9fa;          /* 淺灰背景讓主內容更凸顯 */
+  --fg: #1f2328;
+  --muted: #6b7280;
+  --card: #ffffff;        /* 內容卡片背景改為白，增強對比 */
+  --border: #e5e7eb;
+  --primary: #2563eb;
+  --primary-fg: #ffffff;
+
+  /* badges (text color) */
+  --badge-open: #f59e0b;
+  --badge-in_progress: #3b82f6;
+  --badge-closed: #10b981;
+
+  /* 針對 badge 的背景（color-mix 的回退值） */
+  --badge-open-bg: rgba(245, 158, 11, 0.18);
+  --badge-in_progress-bg: rgba(59, 130, 246, 0.18);
+  --badge-closed-bg: rgba(16, 185, 129, 0.18);
+
+  /* 陰影與圓角 */
+  --radius: 10px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.10);
+
+  /* 版面字級與間距 */
+  --fs-base: 16px;
+  --lh-base: 1.6;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+}
+
+/* -------------------------- */
+/*  Dark scheme               */
+/* -------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0f14;
+    --fg: #e5e7eb;
+    --muted: #9ca3af;
+    --card: #121821;
+    --border: #1f2a37;
+    --primary: #3b82f6;
+    --primary-fg: #0b0f14;
+
+    --badge-open-bg: rgba(245, 158, 11, 0.22);
+    --badge-in_progress-bg: rgba(59, 130, 246, 0.22);
+    --badge-closed-bg: rgba(16, 185, 129, 0.22);
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.35);
+    --shadow-md: 0 2px 10px rgba(0,0,0,0.45);
+  }
+}
+
+/* -------------------------- */
+/*  Base                      */
+/* -------------------------- */
+html, body {
+  background: var(--bg);
+  color: var(--fg);
+  margin: 0;
+  font-size: var(--fs-base);
+  line-height: var(--lh-base);
+  -webkit-text-size-adjust: 100%;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans TC", Arial, "Microsoft JhengHei", "PingFang TC", sans-serif;
+}
+
+/* 與 Django Admin 結構協同：#content/colM */
+#content {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-md);
+}
+
+/* 容器寬度（保留你的 1100px） */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 var(--space-4); }
+
+/* -------------------------- */
+/*  Navbar                    */
+/* -------------------------- */
+.navbar {
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  position: sticky; top: 0; z-index: 10;
+  backdrop-filter: saturate(120%) blur(3px);
+}
+.nav-inner { display: flex; align-items: center; justify-content: space-between; height: 56px; }
+.brand { text-decoration: none; font-weight: 700; color: var(--fg); }
+.nav-links a { margin: 0 var(--space-2); color: var(--fg); text-decoration: none; }
+.nav-links a:hover { text-decoration: underline; }
+.nav-actions { display: flex; align-items: center; gap: var(--space-2); }
+.user { color: var(--muted); font-size: 0.95rem; }
+
+/* -------------------------- */
+/*  Footer                    */
+/* -------------------------- */
+.footer { border-top: 1px solid var(--border); margin-top: var(--space-6); padding: var(--space-4) 0; color: var(--muted); }
+
+/* -------------------------- */
+/*  Headings & breadcrumbs    */
+/* -------------------------- */
+h1, h2 { color: #2c3e50; }
+h1 { font-size: 1.5rem; margin: 0 0 var(--space-2) 0; }
+h2 { font-size: 1.25rem; margin: var(--space-4) 0 var(--space-2); }
+
+.breadcrumbs {
+  font-size: 0.95rem;
+  margin-bottom: var(--space-3);
+  color: var(--muted);
+}
+
+/* -------------------------- */
+/*  Hero & KPIs               */
+/* -------------------------- */
+.hero { display: flex; align-items: end; justify-content: space-between; gap: var(--space-4); padding: var(--space-5) 0; }
+.hero h1 { margin: 0 0 var(--space-2) 0; }
+.muted { color: var(--muted); }
+
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-3); margin: var(--space-3) 0 var(--space-5); }
+.card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px; box-shadow: var(--shadow-sm); }
+.card-title { color: var(--muted); font-size: 0.92rem; }
+.kpi { font-size: 1.9rem; font-weight: 700; margin-top: 4px; }
+
+/* -------------------------- */
+/*  Tools / Inputs / Buttons  */
+/* -------------------------- */
+.tools { margin: var(--space-2) 0 var(--space-4); }
+.input {
+  padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg); color: var(--fg); min-width: 240px;
+}
+.input:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+.btn {
+  display: inline-block; padding: 8px 12px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--card); color: var(--fg);
+  text-decoration: none; cursor: pointer; transition: filter .15s ease, transform .05s ease;
+}
+.btn:hover { filter: brightness(0.98); }
+.btn:active { transform: translateY(1px); }
+.btn.primary { background: var(--primary); color: var(--primary-fg); border-color: var(--primary); }
+.btn.secondary { background: transparent; }
+.btn:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+
+/* -------------------------- */
+/*  Quick filters             */
+/* -------------------------- */
+.quick-filters {
+  background: #eef2f7;
+  padding: var(--space-3);
+  border-radius: 6px;
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border);
+}
+.quick-filters a {
+  display: inline-block;
+  margin: 4px 6px;
+  color: var(--primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+.quick-filters a:hover { text-decoration: underline; }
+
+/* -------------------------- */
+/*  Links                     */
+/* -------------------------- */
+.link { color: var(--primary); text-decoration: none; font-weight: 600; }
+.link:hover { text-decoration: underline; }
+
+/* -------------------------- */
+/*  Table                     */
+/* -------------------------- */
+.table-section .section-header { display: flex; align-items: center; justify-content: space-between; margin: 18px 0 8px; }
+.table-wrap {
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  max-height: 70vh; /* 長表格可捲動，避免整頁太長 */
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 640px;
+  font-size: 0.95rem;
+}
+.table th, .table td { padding: 10px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+.table th {
+  color: #ffffff;
+  background: #2c3e50;  /* 深色表頭，對比清楚 */
+  position: relative;
+}
+.table tbody tr:nth-child(even) { background: #f2f4f7; }      /* zebra stripe */
+.table tbody tr:hover { background: #eaf2ff; }                 /* hover 提示 */
+.table .truncate { max-width: 420px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* 可選：Sticky header（加上 .sticky 類別） */
+.table.sticky thead th { position: sticky; top: 0; z-index: 1; }
+.table.sticky thead th { box-shadow: 0 1px 0 rgba(0,0,0,0.06); }
+
+/* -------------------------- */
+/*  Badges                    */
+/* -------------------------- */
+.badge { padding: 3px 10px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; border: 1px solid transparent; }
+
+/* 先給回退背景，支援 color-mix 時再覆蓋 */
+.badge.open    { background: var(--badge-open-bg);    color: var(--badge-open); }
+.badge.in_progress { background: var(--badge-in_progress-bg); color: var(--badge-in_progress); }
+.badge.closed  { background: var(--badge-closed-bg);  color: var(--badge-closed); }
+
+@supports (color-mix in srgb) {
+  .badge.open        { background: color-mix(in srgb, var(--badge-open) 22%, transparent); }
+  .badge.in_progress { background: color-mix(in srgb, var(--badge-in_progress) 22%, transparent); }
+  .badge.closed      { background: color-mix(in srgb, var(--badge-closed) 22%, transparent); }
+}
+
+/* -------------------------- */
+/*  Empty state               */
+/* -------------------------- */
+.empty {
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--muted);
+  background: var(--card);
+}
+
+/* -------------------------- */
+/*  Alerts                    */
+/* -------------------------- */
+.alert { padding: 10px 12px; border-radius: 8px; margin: 6px 0; }
+.alert.info    { background: #e0f2fe; color: #075985; }
+.alert.success { background: #dcfce7; color: #166534; }
+.alert.warning { background: #fef3c7; color: #92400e; }
+.alert.error   { background: #fee2e2; color: #991b1b; }
+
+/* -------------------------- */
+/*  Accessibility helpers     */
+/* -------------------------- */
+a:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+button:focus-visible, .btn:focus-visible, .input:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+
+/* -------------------------- */
+/*  Responsive tweaks         */
+/* -------------------------- */
+@media (max-width: 1024px) {
+  .table .truncate { max-width: 300px; }
+}
+@media (max-width: 768px) {
+  .kpis { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .table { font-size: 0.92rem; }
+  .table-wrap { max-height: none; } /* 手機就不要限制高度 */
+}

@@ -1,0 +1,87 @@
+{% extends '_base_admin_like.html' %}
+{% block title %}Issues{% endblock %}
+{% block breadcrumbs %}/Home &rsaquo; Issues{% endblock %}
+{% block content %}
+<h1>Issues</h1>
+
+<div id="changelist">
+  <div class="module">
+    <h2>Quick Filters</h2>
+    <div class="submit-row">
+      <a href="?">All</a>
+      <a href="?status=NEW">New</a>
+      <a href="?status=IN_PROGRESS">In Progress</a>
+      <a href="?status=TRIAGED">Triaged</a>
+      <a href="?status=PENDING">Pending</a>
+      <a href="?status=RESOLVED">Resolved</a>
+      <a href="?status=CLOSED">Closed</a>
+      <span class="small"> Priority:</span>
+      <a href="?priority=0">P0</a>
+      <a href="?priority=1">P1</a>
+      <a href="?priority=2">P2</a>
+      <a href="?priority=3">P3</a>
+    </div>
+  </div>
+
+  <div class="module">
+    <h2>Recent Issues <span class="small text-muted">(Total: {{ recent_count }})</span></h2>
+    <div class="results">
+      <table id="result_list">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Title</th>
+            <th scope="col">Status</th>
+            <th scope="col">Priority</th>
+            <th scope="col">Created</th>
+            <th scope="col">Updated</th>
+            <th scope="col">Assigned To</th>
+            <th scope="col">Reporter</th>
+            <th scope="col">SLA Due</th>
+            <th scope="col">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for issue in recent_issues %}
+          <tr class="{% cycle 'row1' 'row2' %}">
+            <td><a href="{% url 'issues:detail' issue.id %}">{{ issue.id }}</a></td>
+            <td><a href="{% url 'issues:detail' issue.id %}">{{ issue.title|default:"(no title)" }}</a></td>
+            <td>{{ issue.get_status_display|default:issue.status }}</td>
+            <td>{{ issue.get_priority_display|default:issue.priority }}</td>
+            <td>{{ issue.created_at|date:"Y-m-d H:i"|default:"-" }}</td>
+            <td>{{ issue.updated_at|date:"Y-m-d H:i"|default:"-" }}</td>
+            <td>
+              {% if issue.assigned_to %}
+                {{ issue.assigned_to.get_full_name|default:issue.assigned_to.username }}
+              {% else %}-{% endif %}
+            </td>
+            <td>
+              {% if issue.reporter %}
+                {{ issue.reporter.get_full_name|default:issue.reporter.username }}
+              {% else %}-{% endif %}
+            </td>
+            <td>
+              {% if issue.sla_due_at %}
+                {{ issue.sla_due_at|date:"Y-m-d H:i" }}
+                {% if issue.due_label %}
+                  <span class="badge {% if issue.due_style == 'danger' %}badge-danger{% else %}badge-info{% endif %}">
+                    {% if issue.due_style == 'danger' %}
+                      Overdue: {{ issue.due_label }}
+                    {% else %}
+                      Due in {{ issue.due_label }}
+                    {% endif %}
+                  </span>
+                {% endif %}
+              {% else %}--{% endif %}
+            </td>
+            <td>{{ issue.description|default:"-"|truncatechars:80 }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="10">No issues found.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

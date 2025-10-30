@@ -1,0 +1,52 @@
+{% extends '_base_admin_like.html' %}
+{% block title %}New Issue{% endblock %}
+{% block breadcrumbs %}&lt;a href="/"&gt;/Home&lt;/a&gt; &amp;rsaquo; &lt;a href="{% url 'issues:home' %}"&gt;/Issues&lt;/a&gt; &amp;rsaquo; New{% endblock %}
+{% block content %}
+<h1>New Issue</h1>
+
+<div class="module">
+  <h2>Details</h2>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <div class="aligned">
+      <p>
+        {{ form.title.label_tag }}<br>
+        {{ form.title }}
+        {{ form.title.errors }}
+      </p>
+      <p>
+        {{ form.description.label_tag }}<br>
+        {{ form.description }}
+        {{ form.description.errors }}
+      </p>
+      <p>
+        {{ form.priority.label_tag }}<br>
+        {{ form.priority }}
+        {{ form.priority.errors }}
+      </p>
+      <p>
+        {{ form.status.label_tag }}<br>
+        {{ form.status }}
+        {{ form.status.errors }}
+      </p>
+      <p>
+        {{ form.assigned_to.label_tag }}<br>
+        {{ form.assigned_to }}
+        {{ form.assigned_to.errors }}
+      </p>
+      <p>
+        {{ form.sla_due_at.label_tag }}<br>
+        {{ form.sla_due_at }}
+        {{ form.sla_due_at.errors }}
+      </p>
+    </div>
+
+    <div class="submit-row">
+      <button class="btn primary" type="submit">Save</button>
+      {% url Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
