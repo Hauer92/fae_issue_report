@@ -1,0 +1,123 @@
+{% extends '_base_tailwind.html' %} 
+{% block title %}{{ issue.title }} | Issue 詳情{% endblock title %}
+
+{% block breadcrumb_items %} 
+    <i class="ri-arrow-right-s-line"></i>
+    <span>{{ issue.title|truncatechars:15 }}</span>
+{% endblock %}
+
+{% block content %}
+<div class="bg-gray-50 min-h-screen -m-4 -mt-8 -mb-16"> <div class="max-w-4xl mx-auto">
+        
+        <div class="flex justify-between items-start mb-6">
+            <h1 class="text-3xl font-extrabold text-gray-900 break-words max-w-full">
+                #{{ issue.id }} - {{ issue.title }}
+            </h1>
+            <a href="#" class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-blue-700 transition duration-150 ease-in-out">
+                <i class="ri-edit-line mr-2"></i> 編輯
+            </a>
+        </div>
+        
+
+        <div class="bg-white shadow-lg rounded-xl p-6 md:p-8 ring-1 ring-black ring-opacity-5 space-y-8">
+
+            <div class="flex flex-wrap items-center gap-4 border-b pb-4">
+                <span class="text-lg font-semibold text-gray-700">狀態:</span>
+                <span class="px-3 py-1 text-sm leading-5 font-semibold rounded-full 
+                    {% if issue.status == 'NEW' %}bg-blue-100 text-blue-800
+                    {% elif issue.status == 'IN_PROGRESS' %}bg-teal-100 text-teal-800
+                    {% elif issue.status == 'RESOLVED' %}bg-green-100 text-green-800
+                    {% elif issue.status == 'CLOSED' %}bg-gray-300 text-gray-800
+                    {% else %}bg-yellow-100 text-yellow-800
+                    {% endif %}">
+                    {{ issue.get_status_display }}
+                </span>
+                
+                <span class="text-lg font-semibold text-gray-700 ml-4">優先級:</span>
+                <span class="px-3 py-1 text-sm leading-5 font-semibold rounded-full 
+                    {% if issue.priority == 0 %}bg-red-600 text-white font-bold
+                    {% elif issue.priority == 1 %}bg-orange-500 text-white font-medium
+                    {% elif issue.priority == 2 %}bg-yellow-300 text-gray-800
+                    {% else %}bg-green-400 text-gray-800
+                    {% endif %}">
+                    {{ issue.get_priority_display }}
+                </span>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-2">描述</h3>
+                <p class="whitespace-pre-wrap text-gray-800">{{ issue.description }}</p>
+            </div>
+
+            <div>
+                <h3 class="text-xl font-semibold text-gray-700 mb-3 border-b pb-2">其他資訊</h3>
+                <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">報告人 (Reporter)</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ issue.created_by.get_full_name|default:issue.created_by.username|default:"—" }}</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">指派給 (Assigned To)</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ issue.assigned_to.get_full_name|default:issue.assigned_to.username|default:"—" }}</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">建立日期 (Created At)</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ issue.created_at|date:"Y-m-d H:i"|default:"—" }}</dd>
+                    </div>
+                    <div class="sm:col-span-1">
+                        <dt class="text-sm font-medium text-gray-500">SLA 截止日期 (SLA Due At)</dt>
+                        <dd class="mt-1 text-sm text-gray-900">{{ issue.sla_due_at|date:"Y-m-d H:i"|default:"—" }}</dd>
+                    </div>
+                </dl>
+            </div>
+
+        </div>
+
+        <div class="mt-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">活動記錄與留言 ({{ comments.count }} 則)</h2>
+
+            <div class="bg-white shadow-lg rounded-xl p-6 ring-1 ring-black ring-opacity-5 mb-6">
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    
+                    {{ comment_form.body }} 
+
+                    <div class="flex justify-end">
+                        <button type="submit" class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-blue-700 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="ri-send-plane-line mr-2"></i> 發佈留言
+                        </button>
+                    </div>
+                    
+                    {% if comment_form.errors %}
+                        <div class="p-2 text-sm text-red-700 bg-red-100 rounded-lg">{{ comment_form.errors }}</div>
+                    {% endif %}
+                </form>
+            </div>
+
+            <div class="space-y-4">
+                {% for comment in comments %}
+                <div class="bg-white shadow-sm rounded-xl p-4 border border-gray-200">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <span class="inline-flex items-center justify-center h-8 w-8 rounded-full bg-blue-500 text-white text-sm font-semibold">
+                                {{ comment.user.username|first|upper }}
+                            </span>
+                            <span class="font-semibold text-gray-800">{{ comment.user.get_full_name|default:comment.user.username }}</span>
+                        </div>
+                        <span class="text-xs text-gray-500">{{ comment.created_at|date:"Y-m-d H:i:s" }}</span>
+                    </div>
+                    
+                    <div class="text-gray-700 whitespace-pre-wrap pl-10">
+                        {{ comment.body }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="bg-white shadow-lg rounded-xl p-6 ring-1 ring-black ring-opacity-5">
+                    <p class="text-gray-500 text-center">目前沒有任何留言，成為第一個留言的人吧！</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        </div>
+</div>
+{% endblock %}

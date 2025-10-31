@@ -1,11 +1,27 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv # <-- 新增：導入 load_dotenv
+
+# ----------------------------------------------------------------------
+# 核心修正：載入 .env 檔案
+# ----------------------------------------------------------------------
+# 這行會尋找並載入與 settings.py 所在目錄 (app/) 的父目錄 (專案根目錄)
+# 中的 .env 檔案。
+load_dotenv(Path(__file__).resolve().parent.parent / '.env') 
+# ----------------------------------------------------------------------
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev")
-DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True"
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+# 修正 DEBUG 和 SECRET_KEY 的讀取邏輯
+# 確保 SECRET_KEY 讀取 DJANGO_SECRET_KEY
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev") 
+
+# 讓 DEBUG 真正從環境變數讀取 True/False 字串
+DEBUG = os.environ.get("DJANGO_DEBUG", "False") == "True" 
+
+# 由於你 .env 中的 ALLOWED_HOSTS=*，可以直接讀取
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", '*').split(',')
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
@@ -13,6 +29,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "mozilla_django_oidc",
     "core",
+    "issues", # <-- 修正：新增 'issues' 應用程式
 ]
 
 MIDDLEWARE = [
@@ -87,4 +104,26 @@ GRAPH = {
     "TEAM_ID": os.environ.get("TEAMS_TEAM_ID"),
     "CHANNEL_ID": os.environ.get("TEAMS_CHANNEL_ID"),
 }
-``
+
+# 確保 MEDIA_ROOT 在 Windows 環境下是 BASE_DIR 下的子目錄
+# 由於你的專案結構暗示著 Docker/Linux 環境，但我們在 Windows 開發，
+# 這裡建議使用一個更適合 Windows 路徑的 fallback，如果沒有設定 NAS_MEDIA_PATH 的話。
+NAS_MEDIA_PATH = os.environ.get("NAS_MEDIA_PATH")
+if not NAS_MEDIA_PATH and DEBUG:
+    # 如果是 Windows 開發環境，預設使用專案內的 media_root 資料夾
+    MEDIA_ROOT = BASE_DIR / "media_root"
+    os.makedirs(MEDIA_ROOT, exist_ok=True)
+elif NAS_MEDIA_PATH:
+    # 如果有設定 NAS 路徑，則使用它 (可能是 Docker 環境)
+    MEDIA_ROOT = NAS_MEDIA_PATH
+# 否則保持原樣 "/app/media"
+
+
+# 這是原本你設為固定 "True" 的地方，已經改為從環境變數讀取
+# 確保我們之前解決 DEBUG=False 的問題時是正確的讀取方式。
+
+# DEBUG = "True" <-- 移除
+# ALLOWED_HOSTS = ['*'] <-- 這裡也從 os.environ.get 讀取了
+
+# 補上 Django 推薦的預設設定
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

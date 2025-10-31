@@ -1,15 +1,70 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <title>{% block title %}Issue 平台{% endblock %}</title>
-  <link href="{% static 'css/app.css' %}" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FAE 問題追蹤系統{% endblock title %}</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.5.0/remixicon.min.css">
+    <style>
+    .priority-p0 { @apply bg-red-600 text-white font-bold; }
+    .priority-p1 { @apply bg-orange-500 text-white font-medium; }
+    .priority-p2 { @apply bg-yellow-300 text-gray-800; }
+    .priority-p3 { @apply bg-green-400 text-gray-800; }
+    .issue-table th { @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-600 bg-gray-100; }
+    .issue-table td { @apply px-4 py-3 whitespace-nowrap text-sm text-gray-800; }
+    .truncate-text {
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 250px; 
+    }
+    
+    {% block extra_styles %}
+    {% endblock extra_styles %}
+</style>
+    
+
 </head>
-<body>
-  <main class="container">
-    {% block content %}{% endblock %}
-  </main>
-  <footer>© {% now "Y" %} — Internal Issue System</footer>
+<body class="bg-gray-100 font-sans antialiased">
+    
+    <div class="bg-blue-700 text-white shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+            <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold"><a href="/" class="hover:text-blue-200">FAE 問題追蹤系統</a></h1>
+                <div class="flex items-center space-x-4">
+                    <button class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition duration-150 ease-in-out shadow-md" onclick="window.location.href='/admin/'">
+                        <i class="ri-settings-4-line mr-1"></i> 管理後台
+                    </button>
+                    <span class="text-blue-200 text-sm hidden sm:inline">
+                        {% if user.is_authenticated %}
+                            {{ user.username|default:"匿名用戶" }}
+                        {% else %}
+                            登入
+                        {% endif %}
+                    </span>
+                    <i class="ri-user-line text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-gray-200 text-gray-700 px-4 py-2 border-b border-gray-300">
+        <div class="max-w-7xl mx-auto flex items-center space-x-2 text-sm sm:px-6 lg:px-8">
+            <i class="ri-home-line"></i>
+            <a href="{% url 'issues:home' %}" class="hover:text-blue-600">問題列表</a>
+            {% block breadcrumb_items %} 
+                {% endblock breadcrumb_items %}
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8">
+        {% block content %}
+            {% endblock content %}
+    </div>
+
+    {% block extra_scripts %}{% endblock extra_scripts %}
 </body>
 </html>

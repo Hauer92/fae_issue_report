@@ -1,52 +1,96 @@
-{% extends '_base_admin_like.html' %}
-{% block title %}New Issue{% endblock %}
-{% block breadcrumbs %}&lt;a href="/"&gt;/Home&lt;/a&gt; &amp;rsaquo; &lt;a href="{% url 'issues:home' %}"&gt;/Issues&lt;/a&gt; &amp;rsaquo; New{% endblock %}
+{% extends 'base.html' %}
+{% block title %}建立新問題{% endblock %}
+
 {% block content %}
-<h1>New Issue</h1>
-
-<div class="module">
-  <h2>Details</h2>
-  <form method="post" novalidate>
-    {% csrf_token %}
-    {{ form.non_field_errors }}
-
-    <div class="aligned">
-      <p>
-        {{ form.title.label_tag }}<br>
-        {{ form.title }}
-        {{ form.title.errors }}
-      </p>
-      <p>
-        {{ form.description.label_tag }}<br>
-        {{ form.description }}
-        {{ form.description.errors }}
-      </p>
-      <p>
-        {{ form.priority.label_tag }}<br>
-        {{ form.priority }}
-        {{ form.priority.errors }}
-      </p>
-      <p>
-        {{ form.status.label_tag }}<br>
-        {{ form.status }}
-        {{ form.status.errors }}
-      </p>
-      <p>
-        {{ form.assigned_to.label_tag }}<br>
-        {{ form.assigned_to }}
-        {{ form.assigned_to.errors }}
-      </p>
-      <p>
-        {{ form.sla_due_at.label_tag }}<br>
-        {{ form.sla_due_at }}
-        {{ form.sla_due_at.errors }}
-      </p>
+<div class="bg-gray-100 text-gray-700 px-4 py-2 border-b border-gray-300">
+    <div class="max-w-7xl mx-auto flex items-center space-x-2 text-sm sm:px-6 lg:px-8">
+        <i class="ri-home-line"></i>
+        <a href="/" class="hover:text-blue-600">首頁</a>
+        <i class="ri-arrow-right-s-line"></i>
+        <a href="{% url 'issues:home' %}" class="hover:text-blue-600">問題列表</a>
+        <i class="ri-arrow-right-s-line"></i>
+        <span>建立新問題</span>
     </div>
+</div>
 
-    <div class="submit-row">
-      <button class="btn primary" type="submit">Save</button>
-      {% url Cancel</a>
+<div class="bg-gray-50 min-h-screen p-4 sm:p-6 lg:p-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-6">建立新問題</h1>
+
+        <div class="bg-white shadow-lg rounded-xl p-6 md:p-8 ring-1 ring-black ring-opacity-5">
+            <h2 class="text-xl font-semibold text-gray-700 mb-4 border-b pb-3">問題詳情</h2>
+            
+            <form method="post" novalidate class="space-y-6">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+                        <span class="font-medium">表單錯誤:</span>
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
+                    
+                    <div class="col-span-1 md:col-span-2">
+                        <label for="{{ form.title.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.title.label }}</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.title.errors }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="col-span-1 md:col-span-2">
+                        <label for="{{ form.description.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.description.label }}</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.description.errors }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.priority.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.priority.label }}</label>
+                        {{ form.priority }}
+                        {% if form.priority.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.priority.errors }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.status.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.status.label }}</label>
+                        {{ form.status }}
+                        {% if form.status.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.status.errors }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.assigned_to.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.assigned_to.label }}</label>
+                        {{ form.assigned_to }}
+                        {% if form.assigned_to.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.assigned_to.errors }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.sla_due_at.id_for_label }}" class="block text-sm font-medium text-gray-700 mb-1">{{ form.sla_due_at.label }}</label>
+                        {{ form.sla_due_at }}
+                        {% if form.sla_due_at.errors %}
+                            <p class="mt-1 text-sm text-red-600">{{ form.sla_due_at.errors }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="pt-6 border-t border-gray-200 flex justify-end space-x-3">
+                    <a href="{% url 'issues:home' %}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                        取消
+                    </a>
+                    <button class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-blue-700 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500" type="submit">
+                        <i class="ri-save-line mr-2"></i> 儲存
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-  </form>
 </div>
 {% endblock %}

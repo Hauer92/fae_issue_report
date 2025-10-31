@@ -102,7 +102,9 @@ else:
 LANGUAGE_CODE = "zh-hant"
 TIME_ZONE = os.environ.get("TIME_ZONE", "Asia/Taipei")
 USE_I18N = True
+USE_L10N = True
 USE_TZ = True
+DEFAULT_CHARSET = 'utf-8'
 
 # --- Static & media ---
 STATIC_URL = "/static/"

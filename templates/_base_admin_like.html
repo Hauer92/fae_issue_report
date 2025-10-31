@@ -15,6 +15,44 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/theme.css' %}">
 
+  <!-- 核心 CSS 壓縮覆蓋：從基底模板強制收縮垂直間距 -->
+  <style>
+    /* 1. 壓縮頁面主標題 h1 下方的空間 */
+    h1 {
+        margin-bottom: 5px !important; 
+        padding-bottom: 0 !important;
+    }
+
+    /* 2. 壓縮 #content-main 頂部的空間，讓內容區塊更緊密地貼近 h1 */
+    #content-main {
+        padding-top: 5px !important; 
+        margin-top: 0 !important; 
+    }
+
+    /* 3. 縮小所有 .module 區塊的頂部間距 (如篩選器和列表之間) */
+    .module {
+        margin-top: 5px !important;
+    }
+    
+    /* 4. 針對 .module.filtered 內部進行極限壓縮 */
+    .module.filtered {
+        padding: 0px 10px 0px 10px !important; /* 移除模塊上下的內邊距 */
+        margin-bottom: 3px !important; /* 縮小模塊與下方列表的距離 */
+    }
+    
+    /* 5. 終極 H2 壓縮：Admin 的 H2 預設 Margin 很大，必須完全移除 */
+    /* 這將同時影響到所有 Admin 樣式中的 h2 標籤 */
+    h2 {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* 確保快速篩選連結的行高和 padding 也被壓縮 */
+    .module.filtered .submit-row {
+        padding: 2px 0 !important;
+    }
+  </style>
+
   {% block extra_css %}{% endblock %}
 </head>
 <body class="change-list">

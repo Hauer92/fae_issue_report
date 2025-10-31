@@ -1,9 +1,11 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+# Get the custom user model (or default User)
 User = get_user_model()
 
 class Issue(models.Model):
+    """Represents a tracked issue or bug report."""
     class Priority(models.IntegerChoices):
         P0 = 0, "P0 - Critical"
         P1 = 1, "P1 - High"
@@ -33,11 +35,34 @@ class Issue(models.Model):
     def __str__(self):
         return f"#{self.id} {self.title}"
 
+# --- New Model Added to fix admin.py import error and SystemCheckError (E108) ---
 class Comment(models.Model):
-    issue = models.ForeignKey(Issue, related_name="comments", on_delete=models.CASCADE)
-    author = models.ForeignKey(User, on_delete=models.PROTECT)
-    body = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    """Represents a comment or activity log on an Issue."""
+    issue = models.ForeignKey(
+        Issue, 
+        related_name="comments", 
+        on_delete=models.CASCADE, 
+        verbose_name='問題'
+        )
+    # The 'author' field is essential for the admin configuration and tracking user changes
+    author = models.ForeignKey(
+        User, 
+        related_name="issue_comments", 
+        on_delete=models.PROTECT
+        )
+    text = models.TextField(
+        verbose_name='留言內容'
+        )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name='建立時間'
+        )
+
+    class Meta:
+        verbose_name = '留言'
+        verbose_name_plural = '留言'
+        ordering = ['created_at']
 
     def __str__(self):
-        return f"Comment by {self.author} on {self.issue}"
+        # Truncate comment text for better admin display
+        return f'{self.user} 於 {self.created_at.strftime("%Y-%m-%d %H:%M")} 留言'
