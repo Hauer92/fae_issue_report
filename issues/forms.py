@@ -46,21 +46,20 @@ class IssueForm(forms.ModelForm):
                  field.widget.attrs['class'] += ' h-32 resize-y'
 
 class CommentForm(forms.ModelForm):
-    # 這是為了讓使用者專注於輸入內容，不顯示 label
-    body = forms.CharField(
+    text = forms.CharField(
         widget=forms.Textarea(attrs={'rows': 3, 'placeholder': '留下您的評論或更新狀態...'}),
         label='' 
     )
 
     class Meta:
         model = Comment
-        fields = ('body',)
+        exclude = ['issue', 'author']
 
     # 為了套用 Tailwind CSS 樣式，我們在這裡加上 class
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
         
-        # 應用 Tailwind 樣式到 Textarea
-        self.fields['body'].widget.attrs.update({
-            'class': 'mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500 text-gray-900 resize-y',
-        })
+    #     # 應用 Tailwind 樣式到 Textarea
+    #     self.fields['body'].widget.attrs.update({
+    #         'class': 'mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-3 focus:ring-blue-500 focus:border-blue-500 text-gray-900 resize-y',
+    #     })

@@ -1,5 +1,5 @@
-{% extends '_base_tailwind.html' %} 
-{% block title %}{{ issue.title }} | Issue 詳情{% endblock title %}
+{% extends '_base_tailwind.html' %}
+{% load static %}
 
 {% block breadcrumb_items %} 
     <i class="ri-arrow-right-s-line"></i>
@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="bg-gray-50 min-h-screen -m-4 -mt-8 -mb-16"> <div class="max-w-4xl mx-auto">
+<div class="pt-16 bg-gray-50 min-h-screen -m-4 -mt-8 -mb-16"> <div class="max-w-4xl mx-auto">
         
         <div class="flex justify-between items-start mb-6">
             <h1 class="text-3xl font-extrabold text-gray-900 break-words max-w-full">
@@ -79,15 +79,14 @@
             <div class="bg-white shadow-lg rounded-xl p-6 ring-1 ring-black ring-opacity-5 mb-6">
                 <form method="post" class="space-y-4">
                     {% csrf_token %}
-                    
-                    {{ comment_form.body }} 
-
+                    <div>
+                        {{ comment_form.text }}
+                    </div>
                     <div class="flex justify-end">
                         <button type="submit" class="flex items-center bg-blue-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-blue-700 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                             <i class="ri-send-plane-line mr-2"></i> 發佈留言
                         </button>
                     </div>
-                    
                     {% if comment_form.errors %}
                         <div class="p-2 text-sm text-red-700 bg-red-100 rounded-lg">{{ comment_form.errors }}</div>
                     {% endif %}

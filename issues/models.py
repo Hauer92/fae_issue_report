@@ -33,36 +33,31 @@ class Issue(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"#{self.id} {self.title}"
+        return f'{self.author} 於 {self.created_at.strftime("%Y-%m-%d %H:%M")} 留言'
 
 # --- New Model Added to fix admin.py import error and SystemCheckError (E108) ---
 class Comment(models.Model):
-    """Represents a comment or activity log on an Issue."""
     issue = models.ForeignKey(
         Issue, 
         related_name="comments", 
         on_delete=models.CASCADE, 
         verbose_name='問題'
-        )
-    # The 'author' field is essential for the admin configuration and tracking user changes
+    )
     author = models.ForeignKey(
         User, 
         related_name="issue_comments", 
         on_delete=models.PROTECT
-        )
+    )
     text = models.TextField(
         verbose_name='留言內容'
-        )
+    )
     created_at = models.DateTimeField(
-        auto_now_add=True,
+        auto_now_add=True, 
         verbose_name='建立時間'
-        )
-
+    )
     class Meta:
         verbose_name = '留言'
         verbose_name_plural = '留言'
         ordering = ['created_at']
-
     def __str__(self):
-        # Truncate comment text for better admin display
-        return f'{self.user} 於 {self.created_at.strftime("%Y-%m-%d %H:%M")} 留言'
+        return f'{self.author} 於 {self.created_at.strftime("%Y-%m-%d %H:%M")} 留言'

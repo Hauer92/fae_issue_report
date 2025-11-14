@@ -60,18 +60,14 @@ def detail(request, pk):
     comments = issue.comments.all()
 
     if request.method == 'POST':
-        # 處理留言提交
         comment_form = CommentForm(request.POST)
         if comment_form.is_valid():
             new_comment = comment_form.save(commit=False)
             new_comment.issue = issue
-            new_comment.user = request.user # 將留言者設定為當前登入使用者
+            new_comment.author = request.user
             new_comment.save()
-            
-            # 重定向回當前頁面以清除 POST 數據，防止重複提交
             return redirect('issues:detail', pk=issue.pk)
     else:
-        # 顯示空表單
         comment_form = CommentForm()
 
     context = {
@@ -81,7 +77,8 @@ def detail(request, pk):
     }
     
     # 渲染 detail.html 模板
-    return render(request, 'issues/detail.html', {'issue': issue}, context)
+    context['issue'] = issue
+    return render(request, 'issues/detail.html', context)
 
 
 def home(request):
